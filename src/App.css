@@ -1,38 +1,34 @@
-.App {
-  text-align: center;
+
+
+#tsparticles {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.react-toggle-track {
+  background-color:#000000!important;
+  width:60px!important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.react-toggle--checked .react-toggle-track {
+  background-color:#ffffff!important;
+  width:60px!important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.react-toggle--checked .react-toggle-thumb {
+ left:36px!important; 
 }
 
-.App-link {
-  color: #61dafb;
+.react-toggle-track-check {
+  top: 4px!important;
+  left: 8px!important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.react-toggle-track-x {
+  top: 5px!important;
+  right: 16px!important;
 }
