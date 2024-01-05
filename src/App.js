@@ -2,7 +2,7 @@ import "./App.css";
 import Preloader from "./Sections/Preloader";
 import Hero from "./Sections/Hero";
 import Toggle from "react-toggle";
-import { useState, useLayoutEffect } from "react"; // Import useEffect
+import { useState, useEffect } from "react"; // Import useEffect
 import "react-toggle/style.css";
 import { CheckedIcon, UncheckedIcon } from "./helpers/Icons";
 import gsap from "gsap";
@@ -14,7 +14,7 @@ function App() {
   const toggleCont = useRef(null);
   const [preloaderComplete, setPreloaderComplete] = useState(false); // Add preloaderComplete state
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const tl = gsap.timeline();
 
     setTimeout(() => {
@@ -66,7 +66,7 @@ function App() {
         ></div>
       </div>
 
-      {preloaderComplete && <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} /></div>} 
+      <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} /></div> 
       {!preloaderComplete && <Preloader />}
     </div>
   );
