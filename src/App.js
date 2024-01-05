@@ -3,6 +3,7 @@ import Hero from "./Sections/Hero";
 import Toggle from "react-toggle";
 import { useState } from "react";
 import "react-toggle/style.css"; 
+import { CheckedIcon,UncheckedIcon } from "./helpers/Icons";
 
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -13,7 +14,7 @@ function App() {
         <Toggle
           checked={isDark}
           onChange={({ target }) => setIsDark(target.checked)}
-          icons={{ checked: "🌙", unchecked: "🔆" }}
+          icons={{ checked: <CheckedIcon />, unchecked: <UncheckedIcon /> }}
           aria-label="Dark mode toggle"
         />
       </div>

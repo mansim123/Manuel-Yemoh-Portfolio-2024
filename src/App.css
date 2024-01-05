@@ -24,11 +24,16 @@
 }
 
 .react-toggle-track-check {
-  top: 4px!important;
+  width:17px!important;
+  top: -6px!important;
   left: 8px!important;
 }
 
 .react-toggle-track-x {
-  top: 5px!important;
-  right: 16px!important;
+  width:16px!important;
+  top: -7px!important;
+  right: 8px!important;
+}
+.react-toggle--checked .react-toggle-thumb {
+  border-color: #000000!important;
 }
