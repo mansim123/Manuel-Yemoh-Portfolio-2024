@@ -66,7 +66,7 @@ function App() {
         ></div>
       </div>
 
-      <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} /></div> 
+      <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} preloaderComplete={preloaderComplete} /></div> 
       {!preloaderComplete && <Preloader />}
     </div>
   );

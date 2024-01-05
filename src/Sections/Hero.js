@@ -4,17 +4,16 @@ import { loadFull } from "tsparticles";
 import { useEffect, useState } from "react";
 
 function Hero(props) {
-
   const [isToggled, setIsToggled] = useState("opacity-0 duration-0");
+
+  console.log(props.preloaderComplete);
 
   useEffect(() => {
     // You can place the code you want to run here
     if (props.isDark) {
-
-        setIsToggled("opacity-0 duration-0");
+      setIsToggled("opacity-0 duration-0");
     } else {
-        setIsToggled("opacity-0 duration-0");
-
+      setIsToggled("opacity-0 duration-0");
     }
   }, [props.isDark]); // Use props.isDark as a dependency
 
@@ -39,7 +38,7 @@ function Hero(props) {
           <h2 className={`font-Roboto font-black xs:text-[2rem] md:text-[3.5rem] lg:text-[5rem] xxl:text-[7rem] text-center ${props.isDark ? 'text-[#ffffff]' : 'text-[#000000]'} transition-all duration-200`}>Front End Developer</h2>
         </div>
       </div>
-
+      {props.preloaderComplete && ( 
         <Particles
           className={`${isToggled} transition-all`}
           id="tsparticles"
@@ -114,6 +113,7 @@ function Hero(props) {
             detectRetina: true,
           }}
         />
+        )}
       </div>
     </>
   );
