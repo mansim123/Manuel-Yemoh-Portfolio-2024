@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-function Preloader() {
+function Preloader(props) {
   const percentageRef = useRef(null);
   const percentageRef2 = useRef(null);
   const whitePreloadBg = useRef(null);
@@ -15,14 +15,14 @@ function Preloader() {
     });
 
     tl.to([percentageRef.current, percentageRef2.current], {
-      duration: 3,
+      duration: props.PreLoaderDuration,
       innerText: "100%",
       roundProps: { innerText: 1 },
       ease: "power1.out",
     }).to(
       [whitePreloadBg.current],
       {
-        duration: 3,
+        duration: props.PreLoaderDuration,
         height: "100%",
         ease: "power1.out",
         transformOrigin: "bottom center",
@@ -32,12 +32,10 @@ function Preloader() {
 
     // Simulate page loading (You can replace this with your actual loading logic)
     setTimeout(() => {
-      // Remove the preloader when loading is done
-      // You can replace this with your actual loading completion logic
-      // For example, when your API requests or assets are loaded
+
       tl.to(".preloader", { opacity: 0, display: "none", duration: 0.5 });
-    }, 2000); // Adjust the delay to match your loading time
-  }, []);
+    }, props.PreLoaderDuration * 1000); // Adjust the delay to match your loading time
+  }, [props.PreLoaderDuration]);
 
   return (
     <div className="absolute inset-0 flex justify-center items-center top-[-4rem] preloader">
