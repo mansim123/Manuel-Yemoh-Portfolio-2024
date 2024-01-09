@@ -30,6 +30,13 @@ function Preloader(props) {
       0
     );
 
+    gsap.to(percentageRef.current, {
+      duration:0.5,
+      opacity:0,
+      delay:props.PreLoaderDuration / 4
+    })
+
+
     // Simulate page loading (You can replace this with your actual loading logic)
     setTimeout(() => {
 
@@ -41,7 +48,7 @@ function Preloader(props) {
     <div className="absolute inset-0 flex justify-center items-center top-[-4rem] preloader">
       <h3
         ref={percentageRef}
-        className={`font-Roboto font-black xs:leading-[1.2] xs:text-[4rem] md:text-[6rem] lg:text-[8rem] xxl:text-[11rem] text-center text-[#ffffff] absolute z-10`}
+        className={`font-Roboto font-black xs:leading-[1.2] xs:text-[4rem] md:text-[6rem] lg:text-[8rem] xxl:text-[11rem] text-center text-[#ffffff] absolute z-20`}
       >
         0%
       </h3>

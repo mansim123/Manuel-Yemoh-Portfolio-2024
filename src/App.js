@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { useRef } from "react";
 
 import Preloader from "./Sections/Preloader";
-//import About from "./Sections/About";
+import About from "./Sections/About";
 import Hero from "./Sections/Hero";
 
 
@@ -19,7 +19,7 @@ function App() {
   const [preloaderComplete, setPreloaderComplete] = useState(false);
 
   //change the time of the preloader
-  const PreLoaderDuration = 3;
+  const PreLoaderDuration = 1;
 
   const openCV = () => {
     const cvFilePath = '../ManuelYemoh_CV_2024-Senior_Front_End Contract_Freelance.pdf';
@@ -83,7 +83,7 @@ function App() {
       </div>
       <button ref={cvBtn} onClick={openCV} className={`font-Roboto py-1 px-3 rounded-xl text-[0.7rem] font-black top-4 left-4 ${isDark ? "bg-[#ffffff] text-[#000000] hover:bg-[#505050] hover:text-[#ffffff]" :  "bg-[#000000] text-[#ffffff] hover:bg-[#cccccc] hover:text-[#000000]"} fixed z-30 transition-all duration-200 opacity-0`} target="_blank" href="#">DOWNLOAD CV</button>
       <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} preloaderComplete={preloaderComplete} /></div>
-      {/* <About/> */}
+      {preloaderComplete && <div className=""><About isDark={isDark} /></div>}
       {!preloaderComplete && <Preloader PreLoaderDuration={PreLoaderDuration} />}
     </div>
   );
