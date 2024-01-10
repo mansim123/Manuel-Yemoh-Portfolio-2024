@@ -29,7 +29,17 @@ function Hero(props) {
   const defaultOptionsWhiteMobile = {
     loop: true, // Set to true if you want the animation to loop
     autoplay: true, // Set to true to autoplay the animation
-    animationData: require("../scrollUpMobeilWhite.json"), // Reference the JSON file
+    animationData: require("../scrollUpMobileWhite.json"), // Reference the JSON file
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  //Lottie code
+  const defaultOptionsBlackMobile = {
+    loop: true, // Set to true if you want the animation to loop
+    autoplay: true, // Set to true to autoplay the animation
+    animationData: require("../scrollUpMobileBlack.json"), // Reference the JSON file
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -109,7 +119,7 @@ function Hero(props) {
                 </div>
                 <div className="xs:block md:hidden">
                   <Lottie
-                    options={defaultOptionsWhiteMobile}
+                    options={defaultOptionsBlackMobile}
                     className="w-full h-full"
                   />
                 </div>
