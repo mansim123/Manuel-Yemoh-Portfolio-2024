@@ -45,7 +45,7 @@ function Preloader(props) {
   }, [props.PreLoaderDuration]);
 
   return (
-    <div className="absolute inset-0 flex justify-center items-center top-[-4rem] preloader">
+    <section className="absolute inset-0 flex justify-center items-center top-[-4rem] preloader">
       <h3
         ref={percentageRef}
         className={`font-Roboto font-black xs:leading-[1.2] xs:text-[4rem] md:text-[6rem] lg:text-[8rem] xxl:text-[11rem] text-center text-[#ffffff] absolute z-20`}
@@ -62,7 +62,7 @@ function Preloader(props) {
         ref={whitePreloadBg}
         className="bg-white h-0 absolute top-0 left-0 w-full"
       ></div>
-    </div>
+    </section>
   );
 }
 

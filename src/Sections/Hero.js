@@ -70,7 +70,7 @@ function Hero(props) {
 
   return (
     <>
-      <div id="particles-js" className="w-screen h-screen fixed">
+      <section id="particles-js" className="w-screen h-screen fixed">
         {/* Centered Text */}
         <div className="absolute inset-0 flex justify-center items-center top-[-4rem]">
           <div>
@@ -204,7 +204,7 @@ function Hero(props) {
             }}
           />
         )}
-      </div>
+      </section>
     </>
   );
 }

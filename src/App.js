@@ -17,6 +17,7 @@ function App() {
   const cvBtn = useRef(null);
   const toggleCont = useRef(null);
   const [preloaderComplete, setPreloaderComplete] = useState(false);
+  const [allPagesHidden, setAllPagesHidden] = useState("hidden opacity-0 transition-all duration-200");
 
   //change the time of the preloader
   const PreLoaderDuration = 1;
@@ -33,6 +34,7 @@ function App() {
 
     setTimeout(() => {
       setPreloaderComplete(true);
+      setAllPagesHidden("bloack opacity-100 transition-all duration-200")
       
       if (heroCont.current) {
         tl.to([heroCont.current,toggleCont.current,cvBtn.current], {
@@ -49,7 +51,7 @@ function App() {
 
   return (
     <div
-      className={`bg-${isDark ? "[#000000]" : "[#ffffff]"} w-screen h-screen transition-all duration-200`}
+      className={`bg-${isDark ? "[#000000]" : "[#ffffff]"} h-screen transition-all duration-200`}
     > 
       
 
@@ -83,7 +85,7 @@ function App() {
       </div>
       <button ref={cvBtn} onClick={openCV} className={`font-Roboto py-1 px-3 rounded-xl text-[0.7rem] font-black top-4 left-4 ${isDark ? "bg-[#ffffff] text-[#000000] hover:bg-[#505050] hover:text-[#ffffff]" :  "bg-[#000000] text-[#ffffff] hover:bg-[#cccccc] hover:text-[#000000]"} fixed z-30 transition-all duration-200 opacity-0`} target="_blank" href="#">DOWNLOAD CV</button>
       <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} preloaderComplete={preloaderComplete} /></div>
-      {preloaderComplete && <div className=""><About isDark={isDark} /></div>}
+      {preloaderComplete && <div className={allPagesHidden}><About isDark={isDark} /></div>}
       {!preloaderComplete && <Preloader PreLoaderDuration={PreLoaderDuration} />}
     </div>
   );
