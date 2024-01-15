@@ -28,6 +28,24 @@ const AmongUsBackground: React.FC = () => {
 
     createDots();
 
+    const stopAnimations = () => {
+
+      for (let i = 0; i < dotRefs.current.length; i++) {
+        gsap.killTweensOf(dotRefs.current[i]);
+        gsap.to(dotRefs.current[i], {
+          duration:0.001,
+          x:-50,
+          onComplete:() =>{
+            animateDots();
+          }
+        });
+      }
+
+    }
+
+    window.addEventListener('resize', stopAnimations);
+
+
     const animateDots = () => {
       for (let i = 0; i < dotRefs.current.length; i++) {
         gsap.to(dotRefs.current[i], {
@@ -35,7 +53,7 @@ const AmongUsBackground: React.FC = () => {
           x: window.innerWidth,
           ease: "linear",
           repeat: -1,
-          delay: i / 8, // Add a small delay to stagger animations
+          delay: i / 8,
         });
       }
     };
@@ -43,6 +61,9 @@ const AmongUsBackground: React.FC = () => {
     setTimeout(() => {
       animateDots();
     }, 500);
+    return () => {
+      window.removeEventListener('resize', stopAnimations);
+    };
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import AmongUsBackground from "../helpers/amongUs";
@@ -11,7 +11,15 @@ interface AboutProps {
 const About: React.FC<AboutProps> = (props) => {
   const aboutCont = useRef<HTMLDivElement>(null);
   const susImage = useRef<HTMLImageElement>(null);
-  const [susImageRef, setSusImageRef] = useState<string>("../manuelImage1.jpg");
+
+  const imageSwapArray = [
+    "../manuelImage1.jpg",
+    "../manuelImage2.jpg",
+    "../manuelImage3.jpg"
+  ]
+
+  let currentImage = 0;
+  const [susImageRef, setSusImageRef] = useState<string>(imageSwapArray[currentImage]);
 
   console.log(props.isDark);
 
@@ -35,27 +43,59 @@ const About: React.FC<AboutProps> = (props) => {
     "Adobe CC",
   ];
 
-  useEffect(() => {
-    function playAnimation() {
-      gsap.to(susImage.current, {
-        duration: 25,
-        x: window.innerWidth + 200,
-        rotate: 360,
-        ease: "linear",
-        onComplete: () => {
-          gsap.to(susImage.current, {
-            duration: 0,
-            x: -150,
-            rotate: 0,
-          });
-          setSusImageRef("../manuelImage2.jpg");
-          playAnimation();
-        },
-      });
-    }
+  
 
-    playAnimation();
+  const handleResize = useCallback(() => {
+    // This function will be called whenever the window resizes
+    resetAnimation();
+    console.log('Window resized!');
   }, []);
+
+const handleImageSwap = () => {
+  if (currentImage < 2) {
+    currentImage = currentImage + 1;
+  } else if (currentImage === 2) {
+    currentImage = 0; 
+  }
+  setSusImageRef(imageSwapArray[currentImage]);
+}
+
+  const resetAnimation = () => {
+    // Reset the animation to its start position
+
+    gsap.killTweensOf(susImage.current);
+    gsap.to(susImage.current, {
+      duration: 0,
+      x: -150,
+      rotate: 0,
+      onComplete: () => {
+        playAnimation();
+      }
+    });
+  };
+
+  const playAnimation = useCallback(() => {
+    gsap.to(susImage.current, {
+      duration: 25,
+      x: window.innerWidth + 200,
+      rotate: 360,
+      ease: "linear",
+      onComplete: () => {
+        resetAnimation();
+        handleImageSwap();
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+   
+    playAnimation();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+
+  }, [playAnimation, handleResize]);
 
   return (
     <>
