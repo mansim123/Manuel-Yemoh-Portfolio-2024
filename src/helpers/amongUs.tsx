@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 
-const AmongUsBackground = () => {
-  const [dots, setDots] = useState([]);
-  const dotRefs = useRef([]);
+const AmongUsBackground: React.FC = () => {
+  const [dots, setDots] = useState<{ size: number; top: number }[]>([]);
+  const dotRefs = useRef<HTMLDivElement[]>([]);
   const amountOfDots = 100;
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const AmongUsBackground = () => {
     };
 
     const createDots = () => {
-      const newDots = [];
+      const newDots: { size: number; top: number }[] = [];
       for (let i = 0; i < amountOfDots; i++) {
         const dot = generateRandomDot();
         newDots.push(dot);
@@ -29,17 +29,12 @@ const AmongUsBackground = () => {
     createDots();
 
     const animateDots = () => {
-      //const tl = gsap.timeline({ repeat: -1 }); // Infinite loop
-
       for (let i = 0; i < dotRefs.current.length; i++) {
         gsap.to(dotRefs.current[i], {
-          duration: Math.floor(Math.random() * 20) + 14, 
+          duration: Math.floor(Math.random() * 20) + 14,
           x: window.innerWidth,
           ease: "linear",
-          repeat:-1,
-          // onComplete: () => {
-          //   dotRefs.style.left = '0px';
-          // },
+          repeat: -1,
           delay: i / 8, // Add a small delay to stagger animations
         });
       }
@@ -48,12 +43,6 @@ const AmongUsBackground = () => {
     setTimeout(() => {
       animateDots();
     }, 500);
-
-    // // Clean up the animation after a certain duration (adjust this as needed)
-    // const animationDuration = 20000;
-    // setTimeout(() => {
-    //   setDots([]);
-    // }, animationDuration);
   }, []);
 
   return (
@@ -68,7 +57,7 @@ const AmongUsBackground = () => {
             top: `${dot.top}px`,
             left: "-10px",
           }}
-          ref={(ref) => (dotRefs.current[index] = ref)}
+          ref={(ref) => (dotRefs.current[index] = ref as HTMLDivElement)}
         ></div>
       ))}
     </div>

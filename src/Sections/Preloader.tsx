@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-function Preloader(props) {
-  const percentageRef = useRef(null);
-  const percentageRef2 = useRef(null);
-  const whitePreloadBg = useRef(null);
+interface PreloaderProps {
+  PreLoaderDuration: number;
+}
+
+function Preloader(props: PreloaderProps) {
+  const percentageRef = useRef<HTMLHeadingElement>(null);
+  const percentageRef2 = useRef<HTMLHeadingElement>(null);
+  const whitePreloadBg = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -31,15 +35,13 @@ function Preloader(props) {
     );
 
     gsap.to(percentageRef.current, {
-      duration:0.5,
-      opacity:0,
-      delay:props.PreLoaderDuration / 4
-    })
-
+      duration: 0.5,
+      opacity: 0,
+      delay: props.PreLoaderDuration / 4,
+    });
 
     // Simulate page loading (You can replace this with your actual loading logic)
     setTimeout(() => {
-
       tl.to(".preloader", { opacity: 0, display: "none", duration: 0.5 });
     }, props.PreLoaderDuration * 1000); // Adjust the delay to match your loading time
   }, [props.PreLoaderDuration]);

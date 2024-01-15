@@ -4,7 +4,13 @@ import { loadFull } from "tsparticles";
 import { useEffect, useState } from "react";
 import Lottie from "react-lottie";
 
-function Hero(props) {
+interface HeroProps {
+  isDark: boolean; // Replace with the actual type of isDark
+  preloaderComplete: boolean; // Add this line to include preloaderComplete prop
+  // Add other prop types here if needed
+}
+
+function Hero(props: HeroProps) {
   //Lottie code
   const defaultOptionsWhite = {
     loop: true, // Set to true if you want the animation to loop
@@ -56,16 +62,18 @@ function Hero(props) {
     }
   }, [props.isDark]);
 
-  const particlesInit = async (main) => {
-    console.log(main);
-    await loadFull(main);
+  const particlesLoaded = () => {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setIsToggled("opacity-100 duration-200");
+        resolve();
+      }, 50);
+    });
   };
 
-  const particlesLoaded = (container) => {
-    console.log(container);
-    setTimeout(() => {
-      setIsToggled("opacity-100 duration-200");
-    }, 50);
+  const particlesInit = async (main: HTMLElement | any) => {
+    console.log(main);
+    await loadFull(main);
   };
 
   return (
@@ -99,13 +107,11 @@ function Hero(props) {
                 <div className="xs:hidden md:block">
                   <Lottie
                     options={defaultOptionsWhite}
-                    className="w-full h-full"
                   />
                 </div>
                 <div className="xs:block md:hidden">
                   <Lottie
                     options={defaultOptionsWhiteMobile}
-                    className="w-full h-full"
                   />
                 </div>
               </>
@@ -114,13 +120,11 @@ function Hero(props) {
                 <div className="xs:hidden md:block">
                   <Lottie
                     options={defaultOptionsBlack}
-                    className="w-full h-full"
                   />
                 </div>
                 <div className="xs:block md:hidden">
                   <Lottie
                     options={defaultOptionsBlackMobile}
-                    className="w-full h-full"
                   />
                 </div>
               </>
