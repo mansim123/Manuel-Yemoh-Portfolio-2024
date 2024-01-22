@@ -6,22 +6,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface AboutProps {
   isDark: boolean;
+  isHidden: string;
 }
 
 const About: React.FC<AboutProps> = (props) => {
-  const aboutCont = useRef<HTMLDivElement>(null);
+  const aboutContInside = useRef<HTMLDivElement>(null);
   const susImage = useRef<HTMLImageElement>(null);
+
+  const dotRefs = useRef<HTMLDivElement[]>([]);
+  const dotsAnimation = useRef<TweenLite[]>([]);
+  // const [dotsAnimation, setDotsAnimation] = useState<TweenLite[]>([]);
 
   const imageSwapArray = [
     "../manuelImage1.jpg",
     "../manuelImage2.jpg",
-    "../manuelImage3.jpg"
-  ]
+    "../manuelImage3.jpg",
+  ];
 
   let currentImage = 0;
-  const [susImageRef, setSusImageRef] = useState<string>(imageSwapArray[currentImage]);
-
-  console.log(props.isDark);
+  const [susImageRef, setSusImageRef] = useState<string>(
+    imageSwapArray[currentImage]
+  );
+  const [previousWidth, setPreviousWidth] = useState<number>(window.innerWidth);
+  const amongUsBackgroundRef = useRef<any>(null); // Create a ref
 
   const technologies = [
     "JavaScript",
@@ -30,6 +37,7 @@ const About: React.FC<AboutProps> = (props) => {
     "NextJs",
     "GatsbyJs",
     "ES6",
+    "TDD",
     "NPM",
     "AWS",
     "XML",
@@ -43,22 +51,24 @@ const About: React.FC<AboutProps> = (props) => {
     "Adobe CC",
   ];
 
-  
-
   const handleResize = useCallback(() => {
     // This function will be called whenever the window resizes
-    resetAnimation();
-    console.log('Window resized!');
-  }, []);
 
-const handleImageSwap = () => {
-  if (currentImage < 2) {
-    currentImage = currentImage + 1;
-  } else if (currentImage === 2) {
-    currentImage = 0; 
-  }
-  setSusImageRef(imageSwapArray[currentImage]);
-}
+    const currentWidth = window.innerWidth;
+    if (currentWidth !== previousWidth) {
+      resetAnimation();
+    }
+    setPreviousWidth(currentWidth);
+  }, [previousWidth]);
+
+  const handleImageSwap = () => {
+    if (currentImage < 2) {
+      currentImage = currentImage + 1;
+    } else if (currentImage === 2) {
+      currentImage = 0;
+    }
+    setSusImageRef(imageSwapArray[currentImage]);
+  };
 
   const resetAnimation = () => {
     // Reset the animation to its start position
@@ -70,7 +80,7 @@ const handleImageSwap = () => {
       rotate: 0,
       onComplete: () => {
         playAnimation();
-      }
+      },
     });
   };
 
@@ -88,22 +98,53 @@ const handleImageSwap = () => {
   }, []);
 
   useEffect(() => {
-   
-    playAnimation();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    if (aboutContInside.current) {
+      const aboutTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: aboutContInside.current,
+          onEnter: () => {
+            if (amongUsBackgroundRef.current) {
+              amongUsBackgroundRef.current.callInitAnimation();
+            }
+          },
+          // onLeave: () => {
+            
+          // },
+          // onEnterBack: () => {
+            
+          // },
+          onLeaveBack:() => {
+            if (amongUsBackgroundRef.current) {
+              amongUsBackgroundRef.current.callStopAnimation();
+            }
+          },
+          scrub: 1, // Scrub animation
+          start: "top 50%", // Trigger starts at the top of the viewport
+          end: "50% 50%", // Trigger ends when the element is at the top of the viewport
+          markers: true,
+          toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
+        },
+      });
 
-  }, [playAnimation, handleResize]);
+      aboutTimeline.to(aboutContInside.current, {
+        opacity: 1, // You can set other properties for the animation here
+      });
+    }
+
+    //playAnimation();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [playAnimation, handleResize, aboutContInside]);
 
   return (
     <>
       <section
-        ref={aboutCont}
-        className={`relative overflow-x-hidden top-[100vh] w-full h-full ${
+        ref={aboutContInside}
+        className={`relative w-full py-10 min-h-screen ${
           props.isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
-        }`}
+        } transition-all duration-200`}
       >
         <img
           ref={susImage}
@@ -111,7 +152,11 @@ const handleImageSwap = () => {
           className="w-[150px] h-[150px] z-[1] rounded-full left-[-150px] absolute xxl:top-[20%]"
           src={susImageRef}
         ></img>
-        <div className="flex justify-center xs:w-100 md:w-[95%] lg:w-[90%] xxl:w-[75%] h-screen m-[auto] flex-wrap transition-all duration-200">
+        <div
+          className={`flex justify-center xs:w-100 md:w-[95%] lg:w-[90%] xxl:w-[75%] h-auto m-[auto] flex-wrap transition-all duration-200 ${
+            props.isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
+          }`}
+        >
           <div className="w-full flex items-center justify-center z-[2] pb-[10rem]">
             <h2
               className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black xs:text-[3rem] md:text-[4rem]  ${
@@ -144,8 +189,8 @@ const handleImageSwap = () => {
               production studio. Working with some of the biggest agencies in
               London, specializing in <b>React</b> and JavaScript technologies,
               HTML5 digital development, banner advertisements, HTML Emails and
-              consultation.<br className="xs:hidden md:show"></br> Based in London and available for remote
-              work.
+              consultation.<br className="xs:hidden md:show"></br> Based in
+              London and available for remote work.
             </p>
             <p
               className={`font-Roboto lg:px-10 pt-10 font-normal lg:text-[1.2rem] xl:text-[1.4rem] ${
@@ -202,7 +247,9 @@ const handleImageSwap = () => {
               <br></br>
             </p>
           </div>
-          <div className={`w-full md:w-1/2 px-10 xs:py-10 md:py-0 relative top-0`}>
+          <div
+            className={`w-full md:w-1/2 px-10 xs:py-10 md:py-0 relative top-0`}
+          >
             <h3
               className={`font-Roboto pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
@@ -230,7 +277,7 @@ const handleImageSwap = () => {
             </div>
           </div>
         </div>
-        <AmongUsBackground />
+        <AmongUsBackground dotRefs={dotRefs} dotsAnimation={dotsAnimation} amongUsBackgroundRef={amongUsBackgroundRef} />
       </section>
     </>
   );

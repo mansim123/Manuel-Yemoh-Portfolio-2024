@@ -1,93 +1,122 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Toggle from "react-toggle";
-import { useState, useEffect } from "react"; // Import useEffect
 import "react-toggle/style.css";
 import { CheckedIcon, UncheckedIcon } from "./helpers/Icons";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import gsap from "gsap";
-import { useRef } from "react";
 
 import Preloader from "./Sections/Preloader";
 import About from "./Sections/About";
 import Hero from "./Sections/Hero";
 
+gsap.registerPlugin(ScrollTrigger);
+
 function App() {
   const [isDark, setIsDark] = useState(true);
   const heroCont = useRef(null);
   const cvBtn = useRef(null);
+  const aboutCont = useRef(null);
   const toggleCont = useRef(null);
-  const [preloaderComplete, setPreloaderComplete] = useState<boolean>(false);
-  const [allPagesHidden, setAllPagesHidden] = useState("hidden opacity-0 transition-all duration-200");
-
-  //change the time of the preloader
+  const [preloaderComplete, setPreloaderComplete] = useState(false);
+  const [isHidden, setIsHidden] = useState("block");
   const PreLoaderDuration = 1;
 
   const openCV = () => {
-    const cvFilePath = '../ManuelYemoh_CV_2024-Senior_Front_End Contract_Freelance.pdf';
-    
-    // Open the CV file in a new browser window.
-    window.open(cvFilePath, '_blank');
-  }
+    const cvFilePath =
+      "../ManuelYemoh_CV_2024-Senior_Front_End_Contract_Freelance.pdf";
+    window.open(cvFilePath, "_blank");
+  };
 
   useEffect(() => {
-    const tl = gsap.timeline();
+
+    // ScrollTrigger.refresh();
+     const tl = gsap.timeline();
 
     setTimeout(() => {
       setPreloaderComplete(true);
-      setAllPagesHidden("bloack opacity-100 transition-all duration-200")
-      
+      setIsHidden("block");
       if (heroCont.current) {
-        tl.to([heroCont.current,toggleCont.current,cvBtn.current], {
+        tl.to([heroCont.current, toggleCont.current, cvBtn.current], {
           opacity: 1,
-          duration: 1.5, // Adjust the duration as needed
+          duration: 1.5,
         });
       } else {
         console.error("Target element not found:", heroCont.current);
       }
+
+      if (aboutCont.current) {
+        const aboutTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: aboutCont.current,
+            onEnter: function () {
+              console.log("entered");
+            },
+            onLeave: () => {
+              setIsHidden("hidden")
+            },
+            onEnterBack: () => {
+              setIsHidden("block")
+            },
+            scrub: 1, // Scrub animation
+            start: "top 50%", // Trigger starts at the top of the viewport
+            end: "50% 50%", // Trigger ends when the element is at the top of the viewport
+            markers: true,
+            toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
+          },
+        });
+  
+        aboutTimeline.to(aboutCont.current, {
+          opacity: 1, // You can set other properties for the animation here
+        });
+      }
+
     }, PreLoaderDuration * 1000);
   }, [heroCont]);
-  
-  
 
   return (
-    <div
-      className={`bg-${isDark ? "[#000000]" : "[#ffffff]"} h-screen transition-all duration-200`}
-    > 
-      
-
-      <div ref={toggleCont} className="fixed top-4 right-4 z-10 opacity-0">
-        <Toggle
-          checked={isDark}
-          onChange={({ target }) => setIsDark(target.checked)}
-          icons={{ checked: <CheckedIcon />, unchecked: <UncheckedIcon /> }}
-          aria-label="Dark mode toggle"
-        />
-      </div>
-      <div className="fixed top-1/2 transform -translate-y-1/2 left-0 hidden opacity-0">
-        <div
-          className={`w-[50px] h-[7px] ${isDark ? "bg-[#ffffff]" : "bg-[#000000]"}`}
-        ></div>
-        <div
-          className={`w-[25px] h-[7px] mt-3 ${
-            isDark ? "bg-[#ffffff] opacity-60" : "bg-[#000000] opacity-60"
-          } transition-all duration-200`}
-        ></div>
-        <div
-          className={`w-[25px] h-[7px] mt-3 ${
-            isDark ? "bg-[#ffffff] opacity-60" : "bg-[#000000] opacity-60"
-          } transition-all duration-200`}
-        ></div>
-        <div
-          className={`w-[25px] h-[7px] mt-3 ${
-            isDark ? "bg-[#ffffff] opacity-60" : "bg-[#000000] opacity-60"
-          } transition-all duration-200`}
-        ></div>
-      </div>
-      <button ref={cvBtn} onClick={openCV} className={`font-Roboto py-1 px-3 rounded-xl text-[0.7rem] font-black top-4 left-4 ${isDark ? "bg-[#ffffff] text-[#000000] hover:bg-[#505050] hover:text-[#ffffff]" :  "bg-[#000000] text-[#ffffff] hover:bg-[#cccccc] hover:text-[#000000]"} fixed z-30 transition-all duration-200 opacity-0`}>DOWNLOAD CV</button>
-      <div ref={heroCont} className="opacity-0"><Hero isDark={isDark} preloaderComplete={preloaderComplete} /></div>
-      {preloaderComplete && <div className={allPagesHidden}><About isDark={isDark} /></div>}
-      {!preloaderComplete && <Preloader PreLoaderDuration={PreLoaderDuration} />}
-    </div>
+    <>
+      <section
+        className={`bg-${
+          isDark ? "[#000000]" : "[#ffffff]"
+        } h-screen transition-all duration-200 overflow-x-hidden`}
+      >
+        <div ref={toggleCont} className="fixed top-4 right-8 z-10 opacity-0">
+          <Toggle
+            checked={isDark}
+            onChange={({ target }) => setIsDark(target.checked)}
+            icons={{ checked: <CheckedIcon />, unchecked: <UncheckedIcon /> }}
+            aria-label="Dark mode toggle"
+          />
+        </div>
+        <button
+          ref={cvBtn}
+          onClick={openCV}
+          className={`font-Roboto py-1 px-3 rounded-xl text-[0.7rem] font-black top-4 left-4 ${
+            isDark
+              ? "bg-[#ffffff] text-[#000000] hover:bg-[#505050] hover:text-[#ffffff]"
+              : "bg-[#000000] text-[#ffffff] hover:bg-[#cccccc] hover:text-[#000000]"
+          } fixed z-30 transition-all duration-200 opacity-0`}
+        >
+          DOWNLOAD CV
+        </button>
+        <div ref={heroCont} className="opacity-0">
+          <Hero
+            isDark={isDark}
+            isHidden={isHidden}
+            preloaderComplete={preloaderComplete}
+          />
+        </div>
+        {preloaderComplete && (
+          <div ref={aboutCont} className={`block opacity-100 transition-all duration-200 absolute top-[100vh]`}>
+            <About isDark={isDark} isHidden={isHidden} />
+          </div>
+        )}
+        {!preloaderComplete && (
+          <Preloader PreLoaderDuration={PreLoaderDuration} />
+        )}
+      </section>
+    </>
   );
 }
 

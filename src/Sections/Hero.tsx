@@ -1,16 +1,17 @@
-import React from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Lottie from "react-lottie";
 
 interface HeroProps {
   isDark: boolean; // Replace with the actual type of isDark
+  isHidden: string;
   preloaderComplete: boolean; // Add this line to include preloaderComplete prop
   // Add other prop types here if needed
 }
 
 function Hero(props: HeroProps) {
+
   //Lottie code
   const defaultOptionsWhite = {
     loop: true, // Set to true if you want the animation to loop
@@ -53,7 +54,7 @@ function Hero(props: HeroProps) {
 
   //Check when the Light/Dark mode is toggled
   const [isToggled, setIsToggled] = useState("opacity-0 duration-0");
-
+  
   useEffect(() => {
     if (props.isDark) {
       setIsToggled("opacity-0 duration-0");
@@ -134,7 +135,7 @@ function Hero(props: HeroProps) {
 
         {props.preloaderComplete && (
           <Particles
-            className={`${isToggled} transition-all`}
+            className={`${isToggled} transition-all ${props.isHidden}`}
             id="tsparticles"
             init={particlesInit}
             loaded={particlesLoaded}

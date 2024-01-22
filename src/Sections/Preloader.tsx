@@ -42,7 +42,7 @@ function Preloader(props: PreloaderProps) {
 
     // Simulate page loading (You can replace this with your actual loading logic)
     setTimeout(() => {
-      tl.to(".preloader", { opacity: 0, display: "none", duration: 0.5 });
+      // tl.to(".preloader", { opacity: 0, display: "none", duration: 0.5 });
     }, props.PreLoaderDuration * 1000); // Adjust the delay to match your loading time
   }, [props.PreLoaderDuration]);
 
