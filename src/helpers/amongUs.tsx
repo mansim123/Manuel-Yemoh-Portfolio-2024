@@ -11,6 +11,7 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({ dotRefs, dotsAnim
   const [dots, setDots] = useState<{ size: number; top: number }[]>([]);
   const aboutUsCont = useRef<HTMLDivElement>(null);
   const amountOfDots = 100;
+  
   let previousWidth = window.innerWidth;
   const [aboutUsContHeight, setAboutUsContHeight] = useState<number>(0);
   const [allowResize, setAllowResize] = useState<boolean>(false);
@@ -19,7 +20,6 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({ dotRefs, dotsAnim
     if (aboutUsCont.current) {
       setAboutUsContHeight(aboutUsCont.current?.clientHeight ?? 0);
     }
-
 
     const initAnimation = () => {
 
@@ -54,7 +54,7 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({ dotRefs, dotsAnim
       for (let i = 0; i < dotRefs.current.length; i++) {
         const dot = dotRefs.current[i];
         const animation = gsap.to(dot, {
-          duration: Math.floor(Math.random() * 20) + 14,
+          duration: Math.floor(Math.random() * 16) + 12,
           x: window.innerWidth,
           ease: "linear",
           repeat: -1,
@@ -118,6 +118,7 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({ dotRefs, dotsAnim
     const handleResize = () => {
       const currentWidth = window.innerWidth;
       if (currentWidth !== previousWidth && allowResize === true) {
+
         initAnimation();
       }
       previousWidth = currentWidth;

@@ -1,6 +1,6 @@
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Lottie from "react-lottie";
 
 interface HeroProps {
@@ -140,7 +140,7 @@ function Hero(props: HeroProps) {
             init={particlesInit}
             loaded={particlesLoaded}
             options={{
-              fpsLimit: 120,
+              fpsLimit: 60,
               pauseOnOutsideViewport: true,
               interactivity: {
                 events: {

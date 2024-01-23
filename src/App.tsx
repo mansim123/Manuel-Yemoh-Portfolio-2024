@@ -28,9 +28,17 @@ function App() {
     window.open(cvFilePath, "_blank");
   };
 
+  const toggleIsHiddenTrue = () => {
+    setIsHidden("hidden");
+  };
+
+  const toggleIsHiddenFalse = () => {
+    setIsHidden("block");
+  };
+
   useEffect(() => {
 
-    // ScrollTrigger.refresh();
+     //ScrollTrigger.refresh();
      const tl = gsap.timeline();
 
     setTimeout(() => {
@@ -43,32 +51,6 @@ function App() {
         });
       } else {
         console.error("Target element not found:", heroCont.current);
-      }
-
-      if (aboutCont.current) {
-        const aboutTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: aboutCont.current,
-            onEnter: function () {
-              console.log("entered");
-            },
-            onLeave: () => {
-              setIsHidden("hidden")
-            },
-            onEnterBack: () => {
-              setIsHidden("block")
-            },
-            scrub: 1, // Scrub animation
-            start: "top 50%", // Trigger starts at the top of the viewport
-            end: "50% 50%", // Trigger ends when the element is at the top of the viewport
-            markers: true,
-            toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
-          },
-        });
-  
-        aboutTimeline.to(aboutCont.current, {
-          opacity: 1, // You can set other properties for the animation here
-        });
       }
 
     }, PreLoaderDuration * 1000);
@@ -109,7 +91,7 @@ function App() {
         </div>
         {preloaderComplete && (
           <div ref={aboutCont} className={`block opacity-100 transition-all duration-200 absolute top-[100vh]`}>
-            <About isDark={isDark} isHidden={isHidden} />
+            <About isDark={isDark} isHidden={isHidden} toggleIsHiddenTrue={toggleIsHiddenTrue} toggleIsHiddenFalse={toggleIsHiddenFalse} />
           </div>
         )}
         {!preloaderComplete && (

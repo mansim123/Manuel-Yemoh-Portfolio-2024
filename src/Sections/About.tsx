@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import AmongUsBackground from "../helpers/amongUs";
@@ -7,11 +7,20 @@ gsap.registerPlugin(ScrollTrigger);
 interface AboutProps {
   isDark: boolean;
   isHidden: string;
+  toggleIsHiddenTrue: () => void;
+  toggleIsHiddenFalse: () => void;
 }
 
 const About: React.FC<AboutProps> = (props) => {
   const aboutContInside = useRef<HTMLDivElement>(null);
   const susImage = useRef<HTMLImageElement>(null);
+  const aboutHeader = useRef<HTMLImageElement>(null);
+  const aboutLine = useRef<HTMLImageElement>(null);
+  const profileHeader = useRef<HTMLImageElement>(null);
+  const profileMainCopy = useRef<HTMLImageElement>(null);
+  const profileSubCopy = useRef<HTMLImageElement>(null);
+  const technologiesHeader = useRef<HTMLImageElement>(null);
+  const technologiesBoxes = useRef<HTMLImageElement>(null);
 
   const dotRefs = useRef<HTMLDivElement[]>([]);
   const dotsAnimation = useRef<TweenLite[]>([]);
@@ -51,15 +60,15 @@ const About: React.FC<AboutProps> = (props) => {
     "Adobe CC",
   ];
 
-  const handleResize = useCallback(() => {
+  const handleResize = () => {
     // This function will be called whenever the window resizes
 
     const currentWidth = window.innerWidth;
     if (currentWidth !== previousWidth) {
-      resetAnimation();
+      resetAnimationSus();
     }
     setPreviousWidth(currentWidth);
-  }, [previousWidth]);
+  };
 
   const handleImageSwap = () => {
     if (currentImage < 2) {
@@ -70,7 +79,7 @@ const About: React.FC<AboutProps> = (props) => {
     setSusImageRef(imageSwapArray[currentImage]);
   };
 
-  const resetAnimation = () => {
+  const resetAnimationSus = () => {
     // Reset the animation to its start position
 
     gsap.killTweensOf(susImage.current);
@@ -84,20 +93,55 @@ const About: React.FC<AboutProps> = (props) => {
     });
   };
 
-  const playAnimation = useCallback(() => {
+  const playAnimation = () => {
     gsap.to(susImage.current, {
-      duration: 25,
+      duration: 15,
       x: window.innerWidth + 200,
       rotate: 360,
       ease: "linear",
       onComplete: () => {
-        resetAnimation();
+        resetAnimationSus();
         handleImageSwap();
       },
     });
-  }, []);
+  };
 
   useEffect(() => {
+
+    let tl = gsap.timeline({ paused: true });
+
+    const animateAboutSection = () => {
+
+      tl = gsap.timeline({ paused: true });
+
+      tl.to(aboutHeader.current, {opacity:1, duration: 1, ease: "sine.inOut" });
+      tl.to(aboutLine.current, { width: 150, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
+      tl.to(profileHeader.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
+      tl.to(profileMainCopy.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.5");
+      tl.to(profileSubCopy.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.25");
+      tl.to(technologiesHeader.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
+      tl.to(technologiesBoxes.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
+
+      tl.play();
+
+    }
+
+    const resetAnimation = () => {
+      tl.pause();
+      // tl.pause(); // Pause the timeline
+      // tl.progress(0); // Reset the timeline progress to the beginning
+      gsap.to(aboutHeader.current, {opacity:0,duration: 0.2, });
+      gsap.to(aboutLine.current, { width: 0, opacity:0,duration: 0.2, });
+      gsap.to(profileHeader.current, { x: -50, opacity:0,duration: 0.2, });
+      gsap.to(profileMainCopy.current, { x: -50, opacity:0,duration: 0.2, });
+      gsap.to(profileSubCopy.current, { x: -50, opacity:0,duration: 0.2, });
+      gsap.to(technologiesHeader.current, { x: 50, opacity:0,duration: 0.2, });
+      gsap.to(technologiesBoxes.current, { x: 50, opacity:0,duration: 0.2, onComplete:() =>{
+        tl.progress(0)
+      } });
+      
+    }
+
     if (aboutContInside.current) {
       const aboutTimeline = gsap.timeline({
         scrollTrigger: {
@@ -105,51 +149,53 @@ const About: React.FC<AboutProps> = (props) => {
           onEnter: () => {
             if (amongUsBackgroundRef.current) {
               amongUsBackgroundRef.current.callInitAnimation();
+              playAnimation();
+              animateAboutSection();
             }
           },
-          // onLeave: () => {
+          onEnterBack: () => {
             
-          // },
-          // onEnterBack: () => {
+            props.toggleIsHiddenFalse();
             
-          // },
-          onLeaveBack:() => {
+          },
+          onLeave: () => {
+            props.toggleIsHiddenTrue();
+          },
+          onLeaveBack: () => {
             if (amongUsBackgroundRef.current) {
-              amongUsBackgroundRef.current.callStopAnimation();
+              amongUsBackgroundRef.
+              current.callStopAnimation();
+              resetAnimation();
+              resetAnimationSus();
             }
           },
-          scrub: 1, // Scrub animation
-          start: "top 50%", // Trigger starts at the top of the viewport
-          end: "50% 50%", // Trigger ends when the element is at the top of the viewport
-          markers: true,
-          toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
+          start: "top 50%",
+          end: "50% 50%",
+          toggleActions: "play none none reverse",
         },
       });
 
-      aboutTimeline.to(aboutContInside.current, {
-        opacity: 1, // You can set other properties for the animation here
-      });
     }
 
-    //playAnimation();
     window.addEventListener("resize", handleResize);
+    //resetAnimation();
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [playAnimation, handleResize, aboutContInside]);
+  });
 
   return (
     <>
       <section
         ref={aboutContInside}
-        className={`relative w-full py-10 min-h-screen ${
+        className={`relative w-full py-10 min-h-screen overflow-hidden ${
           props.isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
         } transition-all duration-200`}
       >
         <img
           ref={susImage}
           alt="manuelImage1"
-          className="w-[150px] h-[150px] z-[1] rounded-full left-[-150px] absolute xxl:top-[20%]"
+          className="w-[150px] h-[150px] z-[1] rounded-full left-[-150px] absolute xs:top-[15rem] sm:top-[15rem]  md:top-[12rem] xxl:top-[11.5rem]"
           src={susImageRef}
         ></img>
         <div
@@ -159,30 +205,34 @@ const About: React.FC<AboutProps> = (props) => {
         >
           <div className="w-full flex items-center justify-center z-[2] pb-[10rem]">
             <h2
+            ref={aboutHeader}
               className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black xs:text-[3rem] md:text-[4rem]  ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } text-center transition-all duration-200`}
+              } text-center `}
             >
               ABOUT ME<br></br>
               <span
+                ref={aboutLine}
                 className={`w-[150px] h-[3px] realtive inline-block relative top-[-3rem] ${
                   props.isDark ? "bg-[#ffffff]" : "bg-[#000000]"
-                } text-center transition-all duration-200`}
+                } text-center `}
               ></span>
             </h2>
           </div>
           <div className={`w-full md:w-1/2 px-10 z-10 relative`}>
             <h3
+              ref={profileHeader}
               className={`font-Roboto lg:px-10 pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } transition-all duration-200`}
+              } `}
             >
               My profile:
             </h3>
             <p
+              ref={profileMainCopy}
               className={`font-Roboto lg:px-10 font-normal  lg:text-[1.2rem] xl:text-[1.4rem] ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } transition-all duration-200`}
+              } `}
             >
               BSc in Computer Game Design, with over 13 years of professional
               digital development experience and 4 years running a successful
@@ -193,9 +243,10 @@ const About: React.FC<AboutProps> = (props) => {
               London and available for remote work.
             </p>
             <p
+            ref={profileSubCopy}
               className={`font-Roboto lg:px-10 pt-10 font-normal lg:text-[1.2rem] xl:text-[1.4rem] ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } transition-all duration-200`}
+              } `}
             >
               Phone number:{" "}
               <a
@@ -251,13 +302,14 @@ const About: React.FC<AboutProps> = (props) => {
             className={`w-full md:w-1/2 px-10 xs:py-10 md:py-0 relative top-0`}
           >
             <h3
+              ref={technologiesHeader}
               className={`font-Roboto pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } transition-all duration-200`}
+              }`}
             >
               My technologies:
             </h3>
-            <div className="flex flex-wrap gap-4 justify-start">
+            <div ref={technologiesBoxes} className="flex flex-wrap gap-4 justify-start">
               {technologies.map((tech, index) => (
                 <div
                   key={index}
@@ -268,7 +320,7 @@ const About: React.FC<AboutProps> = (props) => {
                       props.isDark
                         ? "text-[#000000] bg-[#ffffff]"
                         : "text-[#ffffff] bg-[#000000]"
-                    } transition-all duration-200`}
+                    } `}
                   >
                     {tech}
                   </div>
