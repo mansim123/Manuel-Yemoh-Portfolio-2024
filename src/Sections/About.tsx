@@ -71,9 +71,9 @@ const About: React.FC<AboutProps> = (props) => {
   };
 
   const handleImageSwap = () => {
-    if (currentImage < 2) {
+    if (currentImage < 4) {
       currentImage = currentImage + 1;
-    } else if (currentImage === 2) {
+    } else if (currentImage === 4) {
       currentImage = 0;
     }
     setSusImageRef(imageSwapArray[currentImage]);
@@ -106,44 +106,67 @@ const About: React.FC<AboutProps> = (props) => {
     });
   };
 
+  let tl = gsap.timeline({ paused: true });
+
+  const animateAboutSection = () => {
+    tl = gsap.timeline({ paused: true });
+
+    tl.to(aboutHeader.current, { opacity: 1, duration: 1, ease: "sine.inOut" });
+    tl.to(
+      aboutLine.current,
+      { width: 150, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.75"
+    );
+    tl.to(
+      profileHeader.current,
+      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.75"
+    );
+    tl.to(
+      profileMainCopy.current,
+      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.5"
+    );
+    tl.to(
+      profileSubCopy.current,
+      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.25"
+    );
+    tl.to(
+      technologiesHeader.current,
+      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.75"
+    );
+    tl.to(
+      technologiesBoxes.current,
+      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+      "-=0.75"
+    );
+
+    tl.play();
+  };
+
+  // const resetAnimation = () => {
+  //   tl.pause();
+  //   gsap.to(aboutHeader.current, { opacity: 0, duration: 0.2 });
+  //   gsap.to(aboutLine.current, { width: 0, opacity: 0, duration: 0.2 });
+  //   gsap.to(profileHeader.current, { x: -50, opacity: 0, duration: 0.2 });
+  //   gsap.to(profileMainCopy.current, { x: -50, opacity: 0, duration: 0.2 });
+  //   gsap.to(profileSubCopy.current, { x: -50, opacity: 0, duration: 0.2 });
+  //   gsap.to(technologiesHeader.current, { x: 50, opacity: 0, duration: 0.2 });
+  //   gsap.to(technologiesBoxes.current, {
+  //     x: 50,
+  //     opacity: 0,
+  //     duration: 0.2,
+  //     onComplete: () => {
+  //       tl.progress(0);
+  //     },
+  //   });
+  // };
+
   useEffect(() => {
-
-    let tl = gsap.timeline({ paused: true });
-
-    const animateAboutSection = () => {
-
-      tl = gsap.timeline({ paused: true });
-
-      tl.to(aboutHeader.current, {opacity:1, duration: 1, ease: "sine.inOut" });
-      tl.to(aboutLine.current, { width: 150, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
-      tl.to(profileHeader.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
-      tl.to(profileMainCopy.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.5");
-      tl.to(profileSubCopy.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.25");
-      tl.to(technologiesHeader.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
-      tl.to(technologiesBoxes.current, { x: 0, opacity:1, duration: 1, ease: "sine.inOut" },"-=0.75");
-
-      tl.play();
-
-    }
-
-    const resetAnimation = () => {
-      tl.pause();
-      // tl.pause(); // Pause the timeline
-      // tl.progress(0); // Reset the timeline progress to the beginning
-      gsap.to(aboutHeader.current, {opacity:0,duration: 0.2, });
-      gsap.to(aboutLine.current, { width: 0, opacity:0,duration: 0.2, });
-      gsap.to(profileHeader.current, { x: -50, opacity:0,duration: 0.2, });
-      gsap.to(profileMainCopy.current, { x: -50, opacity:0,duration: 0.2, });
-      gsap.to(profileSubCopy.current, { x: -50, opacity:0,duration: 0.2, });
-      gsap.to(technologiesHeader.current, { x: 50, opacity:0,duration: 0.2, });
-      gsap.to(technologiesBoxes.current, { x: 50, opacity:0,duration: 0.2, onComplete:() =>{
-        tl.progress(0)
-      } });
-      
-    }
-
     if (aboutContInside.current) {
-      const aboutTimeline = gsap.timeline({
+      gsap.timeline({
         scrollTrigger: {
           trigger: aboutContInside.current,
           onEnter: () => {
@@ -154,18 +177,15 @@ const About: React.FC<AboutProps> = (props) => {
             }
           },
           onEnterBack: () => {
-            
             props.toggleIsHiddenFalse();
-            
           },
           onLeave: () => {
             props.toggleIsHiddenTrue();
           },
           onLeaveBack: () => {
             if (amongUsBackgroundRef.current) {
-              amongUsBackgroundRef.
-              current.callStopAnimation();
-              resetAnimation();
+              amongUsBackgroundRef.current.callStopAnimation();
+              //resetAnimation();
               resetAnimationSus();
             }
           },
@@ -174,9 +194,10 @@ const About: React.FC<AboutProps> = (props) => {
           toggleActions: "play none none reverse",
         },
       });
-
     }
+  }, []);
 
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
     //resetAnimation();
     return () => {
@@ -205,15 +226,15 @@ const About: React.FC<AboutProps> = (props) => {
         >
           <div className="w-full flex items-center justify-center z-[2] pb-[10rem]">
             <h2
-            ref={aboutHeader}
-              className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black xs:text-[3rem] md:text-[4rem]  ${
+              ref={aboutHeader}
+              className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black xs:text-[3rem] md:text-[4rem] opacity-0 ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
               } text-center `}
             >
               ABOUT ME<br></br>
               <span
                 ref={aboutLine}
-                className={`w-[150px] h-[3px] realtive inline-block relative top-[-3rem] ${
+                className={`h-[3px] realtive inline-block relative top-[-3rem] w-0 ${
                   props.isDark ? "bg-[#ffffff]" : "bg-[#000000]"
                 } text-center `}
               ></span>
@@ -222,7 +243,7 @@ const About: React.FC<AboutProps> = (props) => {
           <div className={`w-full md:w-1/2 px-10 z-10 relative`}>
             <h3
               ref={profileHeader}
-              className={`font-Roboto lg:px-10 pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] ${
+              className={`font-Roboto lg:px-10 pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0  ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
@@ -230,7 +251,7 @@ const About: React.FC<AboutProps> = (props) => {
             </h3>
             <p
               ref={profileMainCopy}
-              className={`font-Roboto lg:px-10 font-normal  lg:text-[1.2rem] xl:text-[1.4rem] ${
+              className={`font-Roboto lg:px-10 font-normal  lg:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0 ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
@@ -243,8 +264,8 @@ const About: React.FC<AboutProps> = (props) => {
               London and available for remote work.
             </p>
             <p
-            ref={profileSubCopy}
-              className={`font-Roboto lg:px-10 pt-10 font-normal lg:text-[1.2rem] xl:text-[1.4rem] ${
+              ref={profileSubCopy}
+              className={`font-Roboto lg:px-10 pt-10 font-normal lg:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0 ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
@@ -303,13 +324,16 @@ const About: React.FC<AboutProps> = (props) => {
           >
             <h3
               ref={technologiesHeader}
-              className={`font-Roboto pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] ${
+              className={`font-Roboto pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[50px] opacity-0 ${
                 props.isDark ? "text-[#ffffff]" : "text-[#000000]"
               }`}
             >
               My technologies:
             </h3>
-            <div ref={technologiesBoxes} className="flex flex-wrap gap-4 justify-start">
+            <div
+              ref={technologiesBoxes}
+              className="flex flex-wrap gap-4 justify-start relative translate-x-[50px] opacity-0"
+            >
               {technologies.map((tech, index) => (
                 <div
                   key={index}
@@ -329,7 +353,11 @@ const About: React.FC<AboutProps> = (props) => {
             </div>
           </div>
         </div>
-        <AmongUsBackground dotRefs={dotRefs} dotsAnimation={dotsAnimation} amongUsBackgroundRef={amongUsBackgroundRef} />
+        <AmongUsBackground
+          dotRefs={dotRefs}
+          dotsAnimation={dotsAnimation}
+          amongUsBackgroundRef={amongUsBackgroundRef}
+        />
       </section>
     </>
   );

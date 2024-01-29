@@ -9,6 +9,8 @@ import gsap from "gsap";
 import Preloader from "./Sections/Preloader";
 import About from "./Sections/About";
 import Hero from "./Sections/Hero";
+import Work from "./Sections/Work"
+import Contact from "./Sections/Contact";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,9 +63,9 @@ function App() {
       <section
         className={`bg-${
           isDark ? "[#000000]" : "[#ffffff]"
-        } h-screen transition-all duration-200 overflow-x-hidden`}
+        } h-screen transition-all duration-200`}
       >
-        <div ref={toggleCont} className="fixed top-4 right-8 z-10 opacity-0">
+        <div ref={toggleCont} className="fixed top-4 right-8 z-20 opacity-0">
           <Toggle
             checked={isDark}
             onChange={({ target }) => setIsDark(target.checked)}
@@ -90,12 +92,22 @@ function App() {
           />
         </div>
         {preloaderComplete && (
-          <div ref={aboutCont} className={`block opacity-100 transition-all duration-200 absolute top-[100vh]`}>
+          <div ref={aboutCont} className={`block opacity-100 transition-all duration-200 relative`}>
             <About isDark={isDark} isHidden={isHidden} toggleIsHiddenTrue={toggleIsHiddenTrue} toggleIsHiddenFalse={toggleIsHiddenFalse} />
           </div>
         )}
         {!preloaderComplete && (
           <Preloader PreLoaderDuration={PreLoaderDuration} />
+        )}
+        {preloaderComplete && (
+        <div className={`w-auto h-auto relative z-1 ${isDark ? "bg-[#232D3F]" : "bg-[#c6c6db]"}`}>
+          <Work isDark={isDark}/>
+        </div>
+        )}
+        {preloaderComplete && (
+        <div className="w-auto h-screen relative z-1">
+          <Contact isDark={isDark}/>
+        </div>
         )}
       </section>
     </>

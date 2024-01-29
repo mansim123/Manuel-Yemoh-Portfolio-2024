@@ -79,7 +79,7 @@ function Hero(props: HeroProps) {
 
   return (
     <>
-      <section id="particles-js" className="w-screen h-screen fixed">
+      <section id="particles-js" className="w-auto h-screen relative">
         {/* Centered Text */}
         <div className="absolute inset-0 flex justify-center items-center top-[-4rem]">
           <div>
