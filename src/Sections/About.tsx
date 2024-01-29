@@ -30,6 +30,8 @@ const About: React.FC<AboutProps> = (props) => {
     "../manuelImage1.jpg",
     "../manuelImage2.jpg",
     "../manuelImage3.jpg",
+    "../manuelImage4.jpg",
+    "../manuelImage5.jpg",
   ];
 
   let currentImage = 0;
@@ -195,7 +197,7 @@ const About: React.FC<AboutProps> = (props) => {
         },
       });
     }
-  }, []);
+  });
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);

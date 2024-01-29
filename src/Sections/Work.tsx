@@ -187,7 +187,7 @@ const Work: React.FC<WorkProps> = (props) => {
             <a href={item.url} target="_blank" rel="noopener noreferrer">
               <img
                 src={`/${item.imageSrc}`}
-                alt={`Image ${index + 1}`}
+                alt={` ${index + 1}`}
                 className="w-full h-auto rounded-lg shadow-lg"
               />
               <div className="mt-2 text-center">
