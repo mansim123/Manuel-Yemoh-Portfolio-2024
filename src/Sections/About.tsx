@@ -11,7 +11,7 @@ interface AboutProps {
   toggleIsHiddenFalse: () => void;
 }
 
-const About: React.FC<AboutProps> = (props) => {
+const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, toggleIsHiddenFalse }) => {
   const aboutContInside = useRef<HTMLDivElement>(null);
   const susImage = useRef<HTMLImageElement>(null);
   const aboutHeader = useRef<HTMLImageElement>(null);
@@ -26,15 +26,15 @@ const About: React.FC<AboutProps> = (props) => {
   const dotsAnimation = useRef<TweenLite[]>([]);
   // const [dotsAnimation, setDotsAnimation] = useState<TweenLite[]>([]);
 
-  const imageSwapArray = [
+  const [imageSwapArray] = useState<string[]>([
     "../manuelImage1.jpg",
     "../manuelImage2.jpg",
     "../manuelImage3.jpg",
     "../manuelImage4.jpg",
     "../manuelImage5.jpg",
-  ];
+  ]);
 
-  let currentImage = 0;
+  const [currentImage, setCurrentImage] = useState<number>(0);
   const [susImageRef, setSusImageRef] = useState<string>(
     imageSwapArray[currentImage]
   );
@@ -62,91 +62,7 @@ const About: React.FC<AboutProps> = (props) => {
     "Adobe CC",
   ];
 
-  const handleResize = () => {
-    // This function will be called whenever the window resizes
-
-    const currentWidth = window.innerWidth;
-    if (currentWidth !== previousWidth) {
-      resetAnimationSus();
-    }
-    setPreviousWidth(currentWidth);
-  };
-
-  const handleImageSwap = () => {
-    if (currentImage < 4) {
-      currentImage = currentImage + 1;
-    } else if (currentImage === 4) {
-      currentImage = 0;
-    }
-    setSusImageRef(imageSwapArray[currentImage]);
-  };
-
-  const resetAnimationSus = () => {
-    // Reset the animation to its start position
-
-    gsap.killTweensOf(susImage.current);
-    gsap.to(susImage.current, {
-      duration: 0,
-      x: -150,
-      rotate: 0,
-      onComplete: () => {
-        playAnimation();
-      },
-    });
-  };
-
-  const playAnimation = () => {
-    gsap.to(susImage.current, {
-      duration: 15,
-      x: window.innerWidth + 200,
-      rotate: 360,
-      ease: "linear",
-      onComplete: () => {
-        resetAnimationSus();
-        handleImageSwap();
-      },
-    });
-  };
-
-  let tl = gsap.timeline({ paused: true });
-
-  const animateAboutSection = () => {
-    tl = gsap.timeline({ paused: true });
-
-    tl.to(aboutHeader.current, { opacity: 1, duration: 1, ease: "sine.inOut" });
-    tl.to(
-      aboutLine.current,
-      { width: 150, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.75"
-    );
-    tl.to(
-      profileHeader.current,
-      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.75"
-    );
-    tl.to(
-      profileMainCopy.current,
-      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.5"
-    );
-    tl.to(
-      profileSubCopy.current,
-      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.25"
-    );
-    tl.to(
-      technologiesHeader.current,
-      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.75"
-    );
-    tl.to(
-      technologiesBoxes.current,
-      { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
-      "-=0.75"
-    );
-
-    tl.play();
-  };
+  
 
   // const resetAnimation = () => {
   //   tl.pause();
@@ -167,11 +83,100 @@ const About: React.FC<AboutProps> = (props) => {
   // };
 
   useEffect(() => {
+
+    const handleResize = () => {
+      // This function will be called whenever the window resizes
+  
+      const currentWidth = window.innerWidth;
+      if (currentWidth !== previousWidth) {
+        resetAnimationSus();
+      }
+      setPreviousWidth(currentWidth);
+    };
+  
+    const handleImageSwap = () => {
+      if (currentImage < 4) {
+        setCurrentImage(currentImage + 1);
+      } else if (currentImage === 4) {
+        setCurrentImage(0);
+      }
+      setSusImageRef(imageSwapArray[currentImage]);
+    };
+  
+    const resetAnimationSus = () => {
+      // Reset the animation to its start position
+  
+      gsap.killTweensOf(susImage.current);
+      gsap.to(susImage.current, {
+        duration: 0,
+        x: -150,
+        rotate: 0,
+        onComplete: () => {
+          playAnimation();
+        },
+      });
+    };
+  
+    const playAnimation = () => {
+      gsap.to(susImage.current, {
+        duration: 15,
+        x: window.innerWidth + 200,
+        rotate: 360,
+        ease: "linear",
+        onComplete: () => {
+          resetAnimationSus();
+          handleImageSwap();
+        },
+      });
+    };
+  
+    let tl = gsap.timeline({ paused: true });
+  
+    const animateAboutSection = () => {
+      tl = gsap.timeline({ paused: true });
+  
+      tl.to(aboutHeader.current, { opacity: 1, duration: 1, ease: "sine.inOut" });
+      tl.to(
+        aboutLine.current,
+        { width: 150, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.75"
+      );
+      tl.to(
+        profileHeader.current,
+        { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.75"
+      );
+      tl.to(
+        profileMainCopy.current,
+        { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.5"
+      );
+      tl.to(
+        profileSubCopy.current,
+        { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.25"
+      );
+      tl.to(
+        technologiesHeader.current,
+        { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.75"
+      );
+      tl.to(
+        technologiesBoxes.current,
+        { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
+        "-=0.75"
+      );
+  
+      tl.play();
+    };
+
     if (aboutContInside.current) {
       gsap.timeline({
         scrollTrigger: {
           trigger: aboutContInside.current,
+          markers:true,
           onEnter: () => {
+            console.log("hit");
             if (amongUsBackgroundRef.current) {
               amongUsBackgroundRef.current.callInitAnimation();
               playAnimation();
@@ -179,15 +184,14 @@ const About: React.FC<AboutProps> = (props) => {
             }
           },
           onEnterBack: () => {
-            props.toggleIsHiddenFalse();
+            toggleIsHiddenFalse();
           },
           onLeave: () => {
-            props.toggleIsHiddenTrue();
+            toggleIsHiddenTrue();
           },
           onLeaveBack: () => {
             if (amongUsBackgroundRef.current) {
               amongUsBackgroundRef.current.callStopAnimation();
-              //resetAnimation();
               resetAnimationSus();
             }
           },
@@ -197,22 +201,21 @@ const About: React.FC<AboutProps> = (props) => {
         },
       });
     }
-  });
 
-  useEffect(() => {
     window.addEventListener("resize", handleResize);
-    //resetAnimation();
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  });
+  }, [currentImage, imageSwapArray, previousWidth, toggleIsHiddenTrue, toggleIsHiddenFalse]);
+
 
   return (
     <>
       <section
         ref={aboutContInside}
         className={`relative w-full py-10 min-h-screen overflow-hidden ${
-          props.isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
+          isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
         } transition-all duration-200`}
       >
         <img
@@ -223,21 +226,21 @@ const About: React.FC<AboutProps> = (props) => {
         ></img>
         <div
           className={`flex justify-center xs:w-100 md:w-[95%] lg:w-[90%] xxl:w-[75%] h-auto m-[auto] flex-wrap transition-all duration-200 ${
-            props.isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
+            isDark ? "bg-[#101131]" : "bg-[#c6cbdb]"
           }`}
         >
           <div className="w-full flex items-center justify-center z-[2] pb-[10rem]">
             <h2
               ref={aboutHeader}
               className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black xs:text-[3rem] md:text-[4rem] opacity-0 ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } text-center `}
             >
               ABOUT ME<br></br>
               <span
                 ref={aboutLine}
                 className={`h-[3px] realtive inline-block relative top-[-3rem] w-0 ${
-                  props.isDark ? "bg-[#ffffff]" : "bg-[#000000]"
+                  isDark ? "bg-[#ffffff]" : "bg-[#000000]"
                 } text-center `}
               ></span>
             </h2>
@@ -246,7 +249,7 @@ const About: React.FC<AboutProps> = (props) => {
             <h3
               ref={profileHeader}
               className={`font-Roboto lg:px-10 pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0  ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
               My profile:
@@ -254,7 +257,7 @@ const About: React.FC<AboutProps> = (props) => {
             <p
               ref={profileMainCopy}
               className={`font-Roboto lg:px-10 font-normal  lg:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0 ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
               BSc in Computer Game Design, with over 13 years of professional
@@ -268,14 +271,14 @@ const About: React.FC<AboutProps> = (props) => {
             <p
               ref={profileSubCopy}
               className={`font-Roboto lg:px-10 pt-10 font-normal lg:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[-50px] opacity-0 ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
               Phone number:{" "}
               <a
                 href="tel:07525003188"
                 className={` ${
-                  props.isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
+                  isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
                 } transition-all duration-200`}
                 rel="noreferrer"
                 target="_blank"
@@ -287,7 +290,7 @@ const About: React.FC<AboutProps> = (props) => {
               <a
                 href="mailto:Manuelyemoh@gmail.com"
                 className={` ${
-                  props.isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
+                  isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
                 } transition-all duration-200`}
                 rel="noreferrer"
                 target="_blank"
@@ -299,7 +302,7 @@ const About: React.FC<AboutProps> = (props) => {
               <a
                 href="https://www.linkedin.com/in/manuel-yemoh-800a7b37/"
                 className={` ${
-                  props.isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
+                  isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
                 } transition-all duration-200`}
                 rel="noreferrer"
                 target="_blank"
@@ -311,7 +314,7 @@ const About: React.FC<AboutProps> = (props) => {
               <a
                 href="https://github.com/mansim123"
                 className={` ${
-                  props.isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
+                  isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
                 } transition-all duration-200`}
                 rel="noreferrer"
                 target="_blank"
@@ -327,7 +330,7 @@ const About: React.FC<AboutProps> = (props) => {
             <h3
               ref={technologiesHeader}
               className={`font-Roboto pb-10 font-bold xs:text-[1.2rem] xl:text-[1.4rem] relative translate-x-[50px] opacity-0 ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               }`}
             >
               My technologies:
@@ -343,7 +346,7 @@ const About: React.FC<AboutProps> = (props) => {
                 >
                   <div
                     className={`rounded-lg xs:p-3 md:p-4 font-Roboto px-10 font-bold xs:text-[0.8rem] lg:text-[1rem] ${
-                      props.isDark
+                      isDark
                         ? "text-[#000000] bg-[#ffffff]"
                         : "text-[#ffffff] bg-[#000000]"
                     } `}
