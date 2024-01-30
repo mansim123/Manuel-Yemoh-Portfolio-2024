@@ -7,11 +7,9 @@ gsap.registerPlugin(ScrollTrigger);
 interface AboutProps {
   isDark: boolean;
   isHidden: string;
-  toggleIsHiddenTrue: () => void;
-  toggleIsHiddenFalse: () => void;
 }
 
-const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, toggleIsHiddenFalse }) => {
+const About: React.FC<AboutProps> = ({ isDark }) => {
   const aboutContInside = useRef<HTMLDivElement>(null);
   const susImage = useRef<HTMLImageElement>(null);
   const aboutHeader = useRef<HTMLImageElement>(null);
@@ -62,8 +60,6 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
     "Adobe CC",
   ];
 
-  
-
   // const resetAnimation = () => {
   //   tl.pause();
   //   gsap.to(aboutHeader.current, { opacity: 0, duration: 0.2 });
@@ -83,17 +79,16 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
   // };
 
   useEffect(() => {
-
     const handleResize = () => {
       // This function will be called whenever the window resizes
-  
+
       const currentWidth = window.innerWidth;
       if (currentWidth !== previousWidth) {
         resetAnimationSus();
       }
       setPreviousWidth(currentWidth);
     };
-  
+
     const handleImageSwap = () => {
       if (currentImage < 4) {
         setCurrentImage(currentImage + 1);
@@ -102,10 +97,10 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
       }
       setSusImageRef(imageSwapArray[currentImage]);
     };
-  
+
     const resetAnimationSus = () => {
       // Reset the animation to its start position
-  
+
       gsap.killTweensOf(susImage.current);
       gsap.to(susImage.current, {
         duration: 0,
@@ -116,7 +111,7 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
         },
       });
     };
-  
+
     const playAnimation = () => {
       gsap.to(susImage.current, {
         duration: 15,
@@ -129,13 +124,17 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
         },
       });
     };
-  
+
     let tl = gsap.timeline({ paused: true });
-  
+
     const animateAboutSection = () => {
       tl = gsap.timeline({ paused: true });
-  
-      tl.to(aboutHeader.current, { opacity: 1, duration: 1, ease: "sine.inOut" });
+
+      tl.to(aboutHeader.current, {
+        opacity: 1,
+        duration: 1,
+        ease: "sine.inOut",
+      });
       tl.to(
         aboutLine.current,
         { width: 150, opacity: 1, duration: 1, ease: "sine.inOut" },
@@ -166,7 +165,7 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
         { x: 0, opacity: 1, duration: 1, ease: "sine.inOut" },
         "-=0.75"
       );
-  
+
       tl.play();
     };
 
@@ -174,9 +173,8 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
       gsap.timeline({
         scrollTrigger: {
           trigger: aboutContInside.current,
-          markers:true,
+          // markers:true,
           onEnter: () => {
-            console.log("hit");
             if (amongUsBackgroundRef.current) {
               amongUsBackgroundRef.current.callInitAnimation();
               playAnimation();
@@ -184,10 +182,17 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
             }
           },
           onEnterBack: () => {
-            toggleIsHiddenFalse();
+            if (amongUsBackgroundRef.current) {
+              amongUsBackgroundRef.current.callInitAnimation();
+              playAnimation();
+              animateAboutSection();
+            }
           },
           onLeave: () => {
-            toggleIsHiddenTrue();
+            if (amongUsBackgroundRef.current) {
+              amongUsBackgroundRef.current.callStopAnimation();
+              resetAnimationSus();
+            }
           },
           onLeaveBack: () => {
             if (amongUsBackgroundRef.current) {
@@ -196,7 +201,8 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
             }
           },
           start: "top 50%",
-          end: "50% 50%",
+          end: "bottom 20%",
+          // markers:true,
           toggleActions: "play none none reverse",
         },
       });
@@ -207,8 +213,7 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [currentImage, imageSwapArray, previousWidth, toggleIsHiddenTrue, toggleIsHiddenFalse]);
-
+  }, [currentImage, imageSwapArray, previousWidth]);
 
   return (
     <>
@@ -266,7 +271,7 @@ const About: React.FC<AboutProps> = ({ isDark, isHidden, toggleIsHiddenTrue, tog
               London, specializing in <b>React</b> and JavaScript technologies,
               HTML5 digital development, banner advertisements, HTML Emails and
               consultation.<br className="xs:hidden md:show"></br> Based in
-              London and available for remote work.
+              London and available for work.
             </p>
             <p
               ref={profileSubCopy}

@@ -1,17 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Initialize ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
-
 
 interface WorkProps {
   isDark: boolean;
 }
 
 const Work: React.FC<WorkProps> = (props) => {
-
   const workCont = useRef<HTMLDivElement | null>(null);
 
   const [workItemsScale, setWorkItemsScale] = useState<string>("scale-0");
@@ -143,47 +141,48 @@ const Work: React.FC<WorkProps> = (props) => {
       imageSrc: "LaRoche.jpg",
       url: "https://optimuspreviewer.website/optimus/previews/Larochesun/",
     },
-    
   ];
 
   useEffect(() => {
-    const workItems = document.querySelectorAll('.work-item');
+    const workItems = document.querySelectorAll(".work-item");
 
     gsap.from(workItems, {
       scrollTrigger: {
         trigger: workCont.current,
-        start: 'top+=-10%',
-        end: '50% 50%',
+        start: "top+=-10%",
+        end: "50% 50%",
         // markers:true,
-        onEnter:() => {
-          setWorkItemsScale("scale-100 hover:scale-[1.05]")
+        onEnter: () => {
+          setWorkItemsScale("scale-100 hover:scale-[1.05]");
         },
-        onLeaveBack:() => {
-          setWorkItemsScale("scale-0 hover:scale-[0]")
+        onLeaveBack: () => {
+          setWorkItemsScale("scale-0 hover:scale-[0]");
         },
-        toggleActions: 'play none none reverse',
+        toggleActions: "play none none reverse",
       },
     });
   }, []);
 
   return (
     <div ref={workCont} className="w-full h-full relative py-[6rem]">
-       <h2
-              className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black transition-all duration-200  xs:text-[3rem] md:text-[4rem] opacity-1 ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
-              } text-center `}
-            >
-              MY WORK<br></br>
-              <span
-                
-                className={`h-[3px] realtive inline-block transition-all duration-200  relative top-[-3rem] w-[150px] ${
-                  props.isDark ? "bg-[#ffffff]" : "bg-[#000000]"
-                } text-center `}
-              ></span>
-            </h2>
+      <h2
+        className={`font-Roboto lg:px-10 xs:pt-20 xs:pb-5 md:pb-0 md:pt-[0rem] font-black transition-all duration-200  xs:text-[3rem] md:text-[4rem] opacity-1 ${
+          props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+        } text-center `}
+      >
+        MY WORK<br></br>
+        <span
+          className={`h-[3px] realtive inline-block transition-all duration-200  relative top-[-3rem] w-[150px] ${
+            props.isDark ? "bg-[#ffffff]" : "bg-[#000000]"
+          } text-center `}
+        ></span>
+      </h2>
       <div className="flex flex-wrap justify-center items-center mx-auto md:px-[6rem] xl:px-[12rem] xxl:px-[12rem] mt-[2rem]">
         {workData.map((item, index) => (
-          <div key={index} className={`w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8 work-item transition-all duration-1000 ${workItemsScale}`}>
+          <div
+            key={index}
+            className={`w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8 work-item transition-all duration-1000 ${workItemsScale}`}
+          >
             <a href={item.url} target="_blank" rel="noopener noreferrer">
               <img
                 src={`/${item.imageSrc}`}
@@ -191,8 +190,20 @@ const Work: React.FC<WorkProps> = (props) => {
                 className="w-full h-auto rounded-lg shadow-lg"
               />
               <div className="mt-2 text-center">
-                <p className={`text-lg font-semibold transition-all duration-200 ${props.isDark ? "text-[#ffffff]" : "text-[#000000]"}`}>{item.client}</p>
-                <p className={`text-md font-semibold transition-all duration-200  ${props.isDark ? "text-[#ffffff]" : "text-[#000000]"}`}>{item.type}</p>
+                <p
+                  className={`text-lg font-semibold transition-all duration-200 ${
+                    props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                  }`}
+                >
+                  {item.client}
+                </p>
+                <p
+                  className={`text-md font-semibold transition-all duration-200  ${
+                    props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                  }`}
+                >
+                  {item.type}
+                </p>
                 {/* <p className={`text-sm transition-all duration-200  ${props.isDark ? "text-[#cccccc]" : "text-[#3d3d3d]"}`}>{item.year}</p> */}
               </div>
             </a>

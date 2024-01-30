@@ -9,7 +9,7 @@ import gsap from "gsap";
 import Preloader from "./Sections/Preloader";
 import About from "./Sections/About";
 import Hero from "./Sections/Hero";
-import Work from "./Sections/Work"
+import Work from "./Sections/Work";
 import Contact from "./Sections/Contact";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,7 +26,7 @@ function App() {
 
   const openCV = () => {
     const cvFilePath =
-      "../ManuelYemoh_CV_2024-Senior_Front_End_Contract_Freelance.pdf";
+      "https://optimuspreviewer.website/optimus/previews/ManuelYemoh%20CV_2024-Senior_Front_End%20Contract_Freelance.pdf";
     window.open(cvFilePath, "_blank");
   };
 
@@ -39,9 +39,8 @@ function App() {
   };
 
   useEffect(() => {
-
-     //ScrollTrigger.refresh();
-     const tl = gsap.timeline();
+    //ScrollTrigger.refresh();
+    const tl = gsap.timeline();
 
     setTimeout(() => {
       setPreloaderComplete(true);
@@ -54,7 +53,6 @@ function App() {
       } else {
         console.error("Target element not found:", heroCont.current);
       }
-
     }, PreLoaderDuration * 1000);
   }, [heroCont]);
 
@@ -89,25 +87,34 @@ function App() {
             isDark={isDark}
             isHidden={isHidden}
             preloaderComplete={preloaderComplete}
+            toggleIsHiddenTrue={toggleIsHiddenTrue}
+            toggleIsHiddenFalse={toggleIsHiddenFalse}
           />
         </div>
         {preloaderComplete && (
-          <div ref={aboutCont} className={`block opacity-100 transition-all duration-200 relative`}>
-            <About isDark={isDark} isHidden={isHidden} toggleIsHiddenTrue={toggleIsHiddenTrue} toggleIsHiddenFalse={toggleIsHiddenFalse} />
+          <div
+            ref={aboutCont}
+            className={`block opacity-100 transition-all duration-200 relative`}
+          >
+            <About isDark={isDark} isHidden={isHidden} />
           </div>
         )}
         {!preloaderComplete && (
           <Preloader PreLoaderDuration={PreLoaderDuration} />
         )}
         {preloaderComplete && (
-        <div className={`w-auto h-auto relative z-1 ${isDark ? "bg-[#232D3F]" : "bg-[#c6c6db]"}`}>
-          <Work isDark={isDark}/>
-        </div>
+          <div
+            className={`w-auto h-auto relative z-1 ${
+              isDark ? "bg-[#232D3F]" : "bg-[#c6c6db]"
+            }`}
+          >
+            <Work isDark={isDark} />
+          </div>
         )}
         {preloaderComplete && (
-        <div className="w-auto h-screen relative z-1">
-          <Contact isDark={isDark}/>
-        </div>
+          <div className="w-auto h-screen relative z-1">
+            <Contact isDark={isDark} />
+          </div>
         )}
       </section>
     </>

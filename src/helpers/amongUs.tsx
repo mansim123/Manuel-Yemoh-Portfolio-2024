@@ -27,7 +27,7 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({
       const currentWidth = window.innerWidth;
 
       if (currentWidth !== previousWidth && allowResize === true) {
-        initAnimation();
+        callStopAnimation();
       }
       else {
       }
@@ -37,7 +37,11 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({
     const initAnimation = () => {
       resetDotPositions(dotRefs, dotsAnimation.current);
       stopAnimations();
-      animateDots(dotRefs, dotsAnimation.current);
+      setTimeout(() => {
+        animateDots(dotRefs, dotsAnimation.current);
+      },50)
+
+      
     };
 
     // Function to call initAnimation
@@ -115,8 +119,8 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({
       setAboutUsContHeight(aboutUsCont.current.clientHeight);
     }
 
-    stopAnimations();
-    createDots();
+    //stopAnimations();
+    //createDots();
 
     window.addEventListener("resize", handleResize);
 
@@ -124,7 +128,9 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({
         const callStopAnimation = () => {
           setAllowResize(false);
           resetDotPositions(dotRefs, dotsAnimation.current);
+          setTimeout(() => {
           stopAnimations();
+          },50)
         };
     
         // Pass callInitAnimation and callStopAnimation to the parent component through the ref
@@ -135,7 +141,7 @@ const AmongUsBackground: React.FC<AmongUsBackgroundProps> = ({
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      stopAnimations();
+      //stopAnimations();
       createDots();
     };
   }, [

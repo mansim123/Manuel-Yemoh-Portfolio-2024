@@ -1,16 +1,28 @@
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Lottie from "react-lottie";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import gsap from "gsap";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HeroProps {
   isDark: boolean; // Replace with the actual type of isDark
   isHidden: string;
-  preloaderComplete: boolean; // Add this line to include preloaderComplete prop
-  // Add other prop types here if needed
+  preloaderComplete: boolean;
+  toggleIsHiddenTrue: () => void;
+  toggleIsHiddenFalse: () => void;
 }
 
-function Hero(props: HeroProps) {
+const Hero: React.FC<HeroProps> = ({
+  isDark,
+  isHidden,
+  preloaderComplete,
+  toggleIsHiddenTrue,
+  toggleIsHiddenFalse,
+}) => {
+  const heroSectionRef = useRef<HTMLDivElement>(null);
 
   //Lottie code
   const defaultOptionsWhite = {
@@ -54,14 +66,30 @@ function Hero(props: HeroProps) {
 
   //Check when the Light/Dark mode is toggled
   const [isToggled, setIsToggled] = useState("opacity-0 duration-0");
-  
+
   useEffect(() => {
-    if (props.isDark) {
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: heroSectionRef.current,
+        onEnterBack: () => {
+          toggleIsHiddenFalse();
+        },
+        onLeave: () => {
+          toggleIsHiddenTrue();
+        },
+        start: "top 50%",
+        end: "bottom 0%",
+        // markers:true,
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    if (isDark) {
       setIsToggled("opacity-0 duration-0");
     } else {
       setIsToggled("opacity-0 duration-0");
     }
-  }, [props.isDark]);
+  }, [isDark, toggleIsHiddenFalse, toggleIsHiddenTrue]);
 
   const particlesLoaded = () => {
     return new Promise<void>((resolve) => {
@@ -79,20 +107,24 @@ function Hero(props: HeroProps) {
 
   return (
     <>
-      <section id="particles-js" className="w-auto h-screen relative">
+      <section
+        ref={heroSectionRef}
+        id="particles-js"
+        className="w-auto h-screen relative"
+      >
         {/* Centered Text */}
         <div className="absolute inset-0 flex justify-center items-center top-[-4rem]">
           <div>
             <h1
               className={`font-Roboto px-2 font-black xs:leading-[1.2] xs:text-[4rem] md:text-[6rem] lg:text-[8rem] xxl:text-[11rem] text-center ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } transition-all duration-200`}
             >
               MANUEL YEMOH
             </h1>
             <h2
               className={`font-Roboto px-2 font-black xs:text-[2rem] md:text-[3.5rem] lg:text-[5rem] xxl:text-[7rem] text-center ${
-                props.isDark ? "text-[#ffffff]" : "text-[#000000]"
+                isDark ? "text-[#ffffff]" : "text-[#000000]"
               } transition-all duration-200`}
             >
               Front End Developer
@@ -103,39 +135,31 @@ function Hero(props: HeroProps) {
         {/* Centered Lottie Animation */}
         <div className="absolute inset-0 flex justify-center items-center xs:top-[28rem] sm:top-[28rem] md:top-[23rem] lg:top-[30rem] xxl:top-[35rem] transition-all duration-200">
           <div className="xs:w-[80px] xs:h-[225px] lg:w-[75px] lg:h-[250px] xxl:w-[100px] xxl:h-[300px] transition-all duration-200">
-            {props.isDark ? (
+            {isDark ? (
               <>
                 <div className="xs:hidden md:block">
-                  <Lottie
-                    options={defaultOptionsWhite}
-                  />
+                  <Lottie options={defaultOptionsWhite} />
                 </div>
                 <div className="xs:block md:hidden">
-                  <Lottie
-                    options={defaultOptionsWhiteMobile}
-                  />
+                  <Lottie options={defaultOptionsWhiteMobile} />
                 </div>
               </>
             ) : (
               <>
                 <div className="xs:hidden md:block">
-                  <Lottie
-                    options={defaultOptionsBlack}
-                  />
+                  <Lottie options={defaultOptionsBlack} />
                 </div>
                 <div className="xs:block md:hidden">
-                  <Lottie
-                    options={defaultOptionsBlackMobile}
-                  />
+                  <Lottie options={defaultOptionsBlackMobile} />
                 </div>
               </>
             )}
           </div>
         </div>
 
-        {props.preloaderComplete && (
+        {preloaderComplete && (
           <Particles
-            className={`${isToggled} transition-all ${props.isHidden}`}
+            className={`${isToggled} transition-all ${isHidden}`}
             id="tsparticles"
             init={particlesInit}
             loaded={particlesLoaded}
@@ -212,6 +236,6 @@ function Hero(props: HeroProps) {
       </section>
     </>
   );
-}
+};
 
 export default Hero;
