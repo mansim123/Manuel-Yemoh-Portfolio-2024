@@ -53,7 +53,7 @@ function App() {
       } else {
         console.error("Target element not found:", heroCont.current);
       }
-    }, PreLoaderDuration * 1000);
+    }, PreLoaderDuration * 2000);
   }, [heroCont]);
 
   return (
