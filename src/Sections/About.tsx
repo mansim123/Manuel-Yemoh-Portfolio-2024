@@ -53,6 +53,8 @@ const About: React.FC<AboutProps> = ({ isDark }) => {
     "JSON",
     "AJAX",
     "Tailwind",
+    "Shadcn",
+    "v0",
     "CSS2/3",
     "Styled Components",
     "MUI",
@@ -325,6 +327,18 @@ const About: React.FC<AboutProps> = ({ isDark }) => {
                 target="_blank"
               >
                 mansim123
+              </a>
+              <br></br>
+              Blog:{" "}
+              <a
+                href="https://manuelyemohblog.netlify.app/"
+                className={` ${
+                  isDark ? "text-[#4184ff]" : "text-[#5e41ff]"
+                } transition-all duration-200`}
+                rel="noreferrer"
+                target="_blank"
+              >
+                UX/UI Journey
               </a>
               <br></br>
             </p>
