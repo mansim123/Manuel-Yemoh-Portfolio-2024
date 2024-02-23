@@ -26,7 +26,7 @@ function App() {
 
   const openCV = () => {
     const cvFilePath =
-      "https://optimuspreviewer.website/optimus/previews/ManuelYemoh%20CV_2024-Senior_Front_End%20Contract_Freelance.pdf";
+      "https://optimuspreviewer.website/optimus/previews/Manuel_Yemoh_Cv_2024.pdf";
     window.open(cvFilePath, "_blank");
   };
 
