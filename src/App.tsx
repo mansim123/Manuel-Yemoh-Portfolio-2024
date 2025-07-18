@@ -26,7 +26,7 @@ function App() {
 
   const openCV = () => {
     const cvFilePath =
-      "https://optimuspreviewer.website/optimus/previews/Manuel_Yemoh_Cv_2024.pdf";
+      "https://optimuspreviewer.website/optimus/previews/Manuel-Yemoh-CV-2025.pdf";
     window.open(cvFilePath, "_blank");
   };
 

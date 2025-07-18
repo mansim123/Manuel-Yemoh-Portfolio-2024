@@ -49,6 +49,8 @@ const About: React.FC<AboutProps> = ({ isDark }) => {
     "TDD",
     "NPM",
     "AWS",
+    "Strapi",
+    "Stripe",
     "XML",
     "JSON",
     "AJAX",
@@ -267,7 +269,7 @@ const About: React.FC<AboutProps> = ({ isDark }) => {
                 isDark ? "text-[#ffffff]" : "text-[#000000]"
               } `}
             >
-              BSc in Computer Game Design, with over 13 years of professional
+              BSc in Computer Game Design, with over 15 years of professional
               digital development experience and 4 years running a successful
               production studio. Working with some of the biggest agencies in
               London, specializing in <b>React</b> and JavaScript technologies,
